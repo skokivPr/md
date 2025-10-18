@@ -626,6 +626,7 @@ body.light-theme .file-item.active .file-item-actions .delete-btn:hover {
     border-radius: 0px;
     display: block;
     line-height: 1.6;
+    background: var(--kode-bg);
 }
 
 .hljs {
@@ -769,23 +770,30 @@ body.light-theme .file-item.active .file-item-actions .delete-btn:hover {
 }
 
 /* --- Scrollbar Styles --- */
-::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+/* Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-color) var(--ui-bg-color);
 }
 
-::-webkit-scrollbar-track {
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+    width: 16px;
+    height: 16px;
+}
+
+*::-webkit-scrollbar-track {
     background: var(--ui-bg-color);
 }
 
-::-webkit-scrollbar-thumb {
-    background-color: var(--border-color);
-    border: 2px solid var(--ui-bg-color);
-    border-radius: 0;
+*::-webkit-scrollbar-thumb {
+    background-color: var(--accent-color);
+    border-radius: 0px;
+    border: 3px solid var(--ui-bg-color);
 }
 
-::-webkit-scrollbar-thumb:hover {
-    background-color: var(--text-muted-color);
+*::-webkit-scrollbar-thumb:hover {
+    background-color: var(--accent-color-hover);
 }
 
 /* --- Responsive Design --- */
