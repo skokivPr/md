@@ -697,6 +697,8 @@ const getHtmlTemplate = (title, content, theme) => {
             --text-muted-color: #8d8d8d;
             --border-color: #2a2a2a;
             --accent-color: #ff7300;
+            --accent-color-hover: #e65c00;
+            --kode-bg: #121212;
             ` : `
             /* Light Theme */
             --bg-color: #f8f9fa;
@@ -705,11 +707,13 @@ const getHtmlTemplate = (title, content, theme) => {
             --text-muted-color: #6c757d;
             --border-color: #dee2e6;
             --accent-color: #ff7300;
+            --accent-color-hover: #e65c00;
+            --kode-bg: #f8f9fa;
             `}
         }
 
         body {
-            max-width: 800px;
+            max-width: 1000px;
             margin: 2em auto;
             padding: 16px 24px;
             font-family: var(--font-mono);
@@ -775,26 +779,67 @@ const getHtmlTemplate = (title, content, theme) => {
 
         :not(pre) > code {
             font-family: var(--font-mono);
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            background-color: rgba(255, 115, 0, 0.08);
+            color: var(--accent-color);
             padding: .2em .4em;
             font-size: 85%;
-            border: 1px solid var(--border-color);
-            border-radius: 0;
+            border: 1px solid rgba(255, 115, 0, 0.2);
+            border-radius: 2px;
+            font-weight: 600;
         }
 
         pre {
             border: 1px solid var(--border-color);
-            border-radius: 0;
+            border-radius: 0px;
             overflow-x: auto;
             margin-bottom: 1em;
             font-size: 0.9rem;
+            background: var(--ui-bg-color);
+            box-shadow: inset 0 0 0 1px rgba(255, 115, 0, 0.1);
         }
 
         pre code.hljs {
             padding: 1em;
-            border-radius: 0;
+            border-radius: 0px;
+            display: block;
+            line-height: 1.6;
+            background: var(--kode-bg);
         }
+
+        /* Syntax highlighting colors - same as preview */
+        pre code .hljs-tag { color: #abb2bf; }
+        pre code .hljs-name { color: #e06c75; }
+        pre code .hljs-attr { color: #d19a66; }
+        pre code .hljs-string,
+        pre code .hljs-attribute { color: #98c379; }
+        pre code .hljs-keyword,
+        pre code .hljs-selector-tag,
+        pre code .hljs-literal { color: #c678dd; font-weight: 600; }
+        pre code .hljs-number,
+        pre code .hljs-symbol,
+        pre code .hljs-bullet { color: #d19a66; }
+        pre code .hljs-comment,
+        pre code .hljs-quote { color: #5c6370; font-style: italic; }
+        pre code .hljs-function,
+        pre code .hljs-title,
+        pre code .hljs-section { color: #61afef; font-weight: 600; }
+        pre code .hljs-class .hljs-title { color: #e5c07b; }
+        pre code .hljs-variable,
+        pre code .hljs-template-variable { color: #e06c75; }
+        pre code .hljs-built_in,
+        pre code .hljs-builtin-name { color: #e5c07b; }
+        pre code .hljs-regexp,
+        pre code .hljs-selector-id,
+        pre code .hljs-selector-class,
+        pre code .hljs-selector-attr,
+        pre code .hljs-selector-pseudo { color: #98c379; }
+        pre code .hljs-meta,
+        pre code .hljs-doctag { color: #61afef; }
+        pre code .hljs-link { color: var(--accent-color); text-decoration: underline; }
+        pre code .hljs-emphasis { font-style: italic; }
+        pre code .hljs-strong { font-weight: bold; }
+        pre code .hljs-deletion { color: #e06c75; }
+        pre code .hljs-addition { color: #98c379; }
 
         table {
             border-collapse: collapse;
@@ -823,6 +868,33 @@ const getHtmlTemplate = (title, content, theme) => {
             height: auto;
             border-radius: 0;
         }
+
+        /* Scrollbar Styles */
+        /* Firefox */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-color) var(--ui-bg-color);
+        }
+
+        /* Chrome, Edge, and Safari */
+        *::-webkit-scrollbar {
+            width: 16px;
+            height: 16px;
+        }
+
+        *::-webkit-scrollbar-track {
+            background: var(--ui-bg-color);
+        }
+
+        *::-webkit-scrollbar-thumb {
+            background-color: var(--accent-color);
+            border-radius: 0px;
+            border: 3px solid var(--ui-bg-color);
+        }
+
+        *::-webkit-scrollbar-thumb:hover {
+            background-color: var(--accent-color-hover);
+        }
     `;
 
     return `
@@ -834,9 +906,16 @@ const getHtmlTemplate = (title, content, theme) => {
     <title>${title}</title>
     <link rel="stylesheet" href="${hljsThemeUrl}">
     <style>${styles}</style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 </head>
 <body>
     ${content}
+    <script>
+        // Apply syntax highlighting to all code blocks
+        document.querySelectorAll('pre code').forEach((block) => {
+            hljs.highlightElement(block);
+        });
+    </script>
 </body>
 </html>`;
 };
