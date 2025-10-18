@@ -97,28 +97,39 @@ body, html {
 
 /* --- App Layout --- */
 .app-container {
-    display: grid;
-    grid-template-columns: 0px 1fr;
+    display: flex;
     height: 100vh;
-    transition: grid-template-columns 0.3s ease;
-}
-
-.app-container.sidebar-expanded {
-    grid-template-columns: 240px 1fr;
-}
-
-.app-container.sidebar-collapsed {
-    grid-template-columns: 0px 1fr;
+    position: relative;
 }
 
 .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 240px;
+    height: 100vh;
     background: var(--sidebar-bg);
     border-right: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
+    transition: transform 0.3s ease;
+    z-index: 100;
 }
+
+.app-container.sidebar-collapsed .sidebar {
+    transform: translateX(-240px);
+}
+
+.app-container.sidebar-expanded .sidebar {
+    transform: translateX(0);
+}
+
+.sidebar:hover {
+    border-right-color: var(--accent-color);
+    box-shadow: 2px 0 8px rgba(255, 115, 0, 0.1);
+}
+
 
 .sidebar-header {
     display: flex;
@@ -146,7 +157,7 @@ body, html {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: color 0.2s ease;
+    transition: all 0.2s ease;
 }
 
 .sidebar-action-btn:hover {
@@ -171,6 +182,7 @@ body, html {
     overflow: hidden;
     text-overflow: ellipsis;
     transition: background-color 0.2s ease;
+    background: var(--ui-bg-color);
 }
 
 .file-item:hover {
@@ -227,7 +239,7 @@ body, html {
     padding: 4px 6px;
     font-size: 0.9rem;
     line-height: 1;
-    border-radius: 3px;
+    border-radius: 0px;
     transition: all 0.2s ease;
 }
 
@@ -285,6 +297,14 @@ body.light-theme .file-item.active .file-item-actions .delete-btn:hover {
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    margin-left: 240px;
+    transition: margin-left 0.3s ease;
+    width: calc(100% - 240px);
+}
+
+.app-container.sidebar-collapsed .main-content {
+    margin-left: 0;
+    width: 100%;
 }
 
 .app-header {
@@ -593,6 +613,27 @@ body.light-theme .file-item.active .file-item-actions .delete-btn:hover {
     margin-bottom: 1em;
 }
 
+.markdown-preview ul {
+    list-style-type: disc;
+}
+
+.markdown-preview ol {
+    list-style-type: decimal;
+}
+
+.markdown-preview li {
+    margin-bottom: 0.5em;
+}
+
+.markdown-preview ul ul {
+    list-style-type: circle;
+    margin-bottom: 0.5em;
+}
+
+.markdown-preview ul ul ul {
+    list-style-type: square;
+}
+
 .markdown-preview blockquote {
     border-left: 4px solid var(--border-color);
     padding-left: 1em;
@@ -798,21 +839,14 @@ body.light-theme .file-item.active .file-item-actions .delete-btn:hover {
 
 /* --- Responsive Design --- */
 @media (max-width: 768px) {
-    .app-container {
-        grid-template-columns: 1fr;
-        position: relative;
+    .sidebar {
+        width: 240px;
+        transform: translateX(-240px);
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
     }
 
-    .sidebar {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 280px;
-        height: 100vh;
-        z-index: 1000;
-        transform: translateX(-100%);
-        transition: transform 0.3s ease;
-        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    .app-container.sidebar-collapsed .sidebar {
+        transform: translateX(-240px);
     }
 
     .app-container.sidebar-expanded .sidebar {
@@ -821,6 +855,7 @@ body.light-theme .file-item.active .file-item-actions .delete-btn:hover {
 
     .main-content {
         width: 100%;
+        margin-left: 0;
     }
 
     .editor-main-grid {
@@ -880,7 +915,11 @@ body.light-theme .file-item.active .file-item-actions .delete-btn:hover {
 
 @media (max-width: 480px) {
     .sidebar {
-        width: 100vw;
+        width: 240px;
+    }
+
+    .app-container.sidebar-collapsed .sidebar {
+        transform: translateX(-240px);
     }
 
     .app-header {
