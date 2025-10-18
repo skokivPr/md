@@ -770,6 +770,27 @@ const getHtmlTemplate = (title, content, theme) => {
             margin-bottom: 1em;
         }
 
+        ul {
+            list-style-type: disc;
+        }
+
+        ol {
+            list-style-type: decimal;
+        }
+
+        li {
+            margin-bottom: 0.5em;
+        }
+
+        ul ul {
+            list-style-type: circle;
+            margin-bottom: 0.5em;
+        }
+
+        ul ul ul {
+            list-style-type: square;
+        }
+
         blockquote {
             border-left: 4px solid var(--border-color);
             padding-left: 1em;
@@ -1711,11 +1732,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Handle window resize for responsive behavior
     window.addEventListener('resize', () => {
-        // Always keep sidebar collapsed by default
-        if (!dom.appContainer.classList.contains('sidebar-expanded')) {
-            dom.appContainer.classList.add('sidebar-collapsed');
-        }
-
         // Trigger Monaco editor layout update
         if (editor) {
             setTimeout(() => {
@@ -1724,6 +1740,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Set initial state - sidebar collapsed by default
-    dom.appContainer.classList.add('sidebar-collapsed');
+    // Initial state is set in HTML (sidebar-collapsed class)
 });
